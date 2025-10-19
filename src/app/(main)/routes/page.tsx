@@ -1,5 +1,6 @@
 import { Button } from "@/shared/ui/Button";
 import { RouteCategories } from "./RouteCategories";
+import Link from "next/link";
 
 const ROUTE_CATEGORIES = [
   { title: "Популярные", icon: "" },
@@ -64,6 +65,37 @@ export default function Routes() {
             <Button>Подробнее о маршруте</Button>
           </div>
           <div className="bg-[linear-gradient(135deg,#667eea,#764ba2)] w-full max-w[540px]"></div>
+        </div>
+
+        <div className="mt-2xl">
+          <div className="flex justify-between">
+            <h2 className="font-bold text-2xl">Популярные маршруты</h2>
+            <Link href={"/"} className="text-primary">
+              Все маршруты
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-xl mt-xl">
+            {Array(8)
+              .fill(0)
+              .map((_, index) => (
+                <div
+                  key={index}
+                  className="shadow-md overflow-hidden cursor-pointer rounded-xl"
+                >
+                  <div className="bg-[linear-gradient(135deg,#667eea,#764ba2)] h-[180px] relative ">
+                    <p className="bg-accent-500 rounded-2xl text-xs font-semibold top-md left-md absolute text-white px-md py-sm">
+                      Топ-10
+                    </p>
+                  </div>
+                  <div className="bg-white p-lg">
+                    <p className="text-lg font-semibold">
+                      Выходные в Санкт-Петербурге
+                    </p>
+                    <p className="text-secondary-text mt-sm">Санкт-Петербург</p>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,19 @@
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 
-interface MapContextType {}
+interface MapContextType {
+  placemark: any[];
+  setPlacemarks: (objects: []) => void;
+}
 
 const MapContext = createContext<MapContextType | null>(null);
 
 export const MapContextProvider = ({ children }: PropsWithChildren) => {
-  return <MapContext.Provider value={{}}>{children}</MapContext.Provider>;
+  const [placemark, setPlacemarks] = useState([]);
+  return (
+    <MapContext.Provider value={{ placemark, setPlacemarks }}>
+      {children}
+    </MapContext.Provider>
+  );
 };
 
 export const useMapContext = () => {

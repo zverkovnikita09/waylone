@@ -29,10 +29,14 @@ export const useYandexMaps = () => {
         });
 
         //@ts-ignore
-        window.ymaps.ready(() => {
-          setYmaps(window.ymaps);
-          setLoading(false);
-        });
+        window.ymaps.ready(
+          () => {
+            setYmaps(window.ymaps);
+            setLoading(false);
+          },
+          null,
+          ["multiRouter.MultiRoute"]
+        );
       } catch (err) {
         setError(err);
         setLoading(false);

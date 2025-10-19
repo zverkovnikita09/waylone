@@ -48,6 +48,7 @@ export const Button = <T extends AllowedButtonElementTypes = "button">(
     <Component
       className={cn(
         "cursor-pointer rounded-lg font-medium transition-all duration-base",
+        { "w-full": fullWidth },
         STYLE_VARIANTS[variant],
         SIZE_VARIANTS[size]
       )}
