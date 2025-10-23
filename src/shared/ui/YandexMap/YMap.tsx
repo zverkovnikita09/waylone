@@ -3,6 +3,7 @@ import {
   Children,
   memo,
   PropsWithChildren,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -11,21 +12,24 @@ import {
 import { useYandexMaps } from "./useYandexMaps";
 import { MapContextProvider } from "./MapContext";
 import { isPlacemarkElement, PlacemarkElement } from "./Placemark";
+import { filterPointsWithinRadius, Point } from "@/shared/lib/mapUtils";
+import { radiusToZoom } from "@/shared/lib/radiusToZoom";
+import { Button } from "../Button";
 
 interface YMapProps {
-  zoom?: number;
-  choosenPoints?: [number, number][];
+  choosenPoints?: Point[];
   handleSetDistanceAndDuration: (
     params: {
       distance: number;
       duration: number;
     }[]
   ) => void;
+  searchRadius: number;
 }
 
 export const YMap = memo(
   ({
-    zoom = 10,
+    searchRadius = 0,
     children,
     choosenPoints,
     handleSetDistanceAndDuration,
@@ -33,6 +37,7 @@ export const YMap = memo(
     const mapRef = useRef(null);
     const mapInstance = useRef(null);
     const geoObjects = useRef(null);
+    const circleRef = useRef<any>(null);
     const { ymaps, loading, error } = useYandexMaps();
 
     const placemarks = useMemo(
@@ -49,7 +54,7 @@ export const YMap = memo(
       if (ymaps && mapRef.current) {
         const map = new ymaps.Map(mapRef.current, {
           center: [55.76, 37.64],
-          zoom,
+          zoom: radiusToZoom(searchRadius || 10),
           controls: [],
         });
 
@@ -70,10 +75,35 @@ export const YMap = memo(
     }, [ymaps, mapRef]);
 
     useEffect(() => {
-      if (mapInstance.current && typeof zoom === "number") {
-        mapInstance.current.setZoom(zoom);
+      if (
+        mapInstance.current &&
+        geoObjects.current &&
+        ymaps &&
+        typeof searchRadius === "number"
+      ) {
+        mapInstance.current.setZoom(radiusToZoom(searchRadius));
+
+        if (circleRef.current) {
+          geoObjects.current.remove(circleRef.current);
+        }
+
+        const circle = new ymaps.Circle(
+          [[55.76, 37.64], searchRadius],
+          {},
+          {
+            fillColor: "rgba(0, 0, 255, 0.1)",
+            strokeColor: "#0000FF",
+            strokeWidth: 2,
+            interactive: false,
+            cursor: "default",
+            draggable: false,
+          }
+        );
+
+        geoObjects.current.add(circle);
+        circleRef.current = circle;
       }
-    }, [zoom]);
+    }, [searchRadius]);
 
     useEffect(() => {
       if (!placemarks.length || !ymaps || !geoObjects.current) return;
@@ -103,7 +133,7 @@ export const YMap = memo(
 
         geoObjects.current.add(yPlacemark);
       });
-    }, [placemarks, ymaps]);
+    }, [placemarks, ymaps, searchRadius]);
 
     useEffect(() => {
       if (!ymaps || !geoObjects.current) return;
@@ -170,6 +200,19 @@ export const YMap = memo(
       }
     }, [choosenPoints?.length]);
 
+    const buildRoute = () => {
+      if (!geoObjects.current || !ymaps || !multiRouteRef.current) return;
+      const filteredPlacemarks = filterPointsWithinRadius(
+        [55.76, 37.64],
+        placemarks,
+        searchRadius / 1000
+      );
+
+      multiRouteRef.current.model.setReferencePoints(
+        filteredPlacemarks.map(({ props }) => props.coords)
+      );
+    };    
+
     if (loading) return <div className="h-full w-full">Загрузка карты...</div>;
     if (error)
       return <div className="h-full w-full">Ошибка: {error.message}</div>;
@@ -181,6 +224,9 @@ export const YMap = memo(
           <div className="absolute bottom-[20px] text-sm right-[20px] bg-white shadow-md flex gap-sm items-center px-lg py-md rounded-lg">
             <div className="rounded-full bg-success w-md h-md" />
             <p>Москва, Тверская улица</p>
+          </div>
+          <div className="absolute bottom-[20px] text-sm left-[20px] bg-white shadow-md flex gap-sm items-center px-lg py-md rounded-lg">
+            <Button onClick={buildRoute}>Построить маршрут</Button>
           </div>
         </div>
       </MapContextProvider>

@@ -1,17 +1,16 @@
+/**
+ * 
+ * @param radius в метрах
+ * @returns значение зума для карты
+ */
 export const radiusToZoom = (radius: number): number => {
   const zoomLevels = [
-    { maxRadius: 1, zoom: 17 },
-    { maxRadius: 3, zoom: 16 },
-    { maxRadius: 5, zoom: 16 },
-    { maxRadius: 7, zoom: 14 },
-    { maxRadius: 10, zoom: 13 },
-    { maxRadius: 15, zoom: 12 },
-    { maxRadius: 20, zoom: 11 },
-    { maxRadius: 25, zoom: 10 },
-    { maxRadius: 30, zoom: 9 },
-    { maxRadius: 35, zoom: 8 },
-    { maxRadius: 40, zoom: 7 },
-    { maxRadius: 45, zoom: 6 },
+    { maxRadius: 500, zoom: 16 },
+    { maxRadius: 1000, zoom: 15 },
+    { maxRadius: 2000, zoom: 14 },
+    { maxRadius: 4500, zoom: 13 },
+    { maxRadius: 8000, zoom: 12 },
+    { maxRadius: 15000, zoom: 11 },
     { maxRadius: Infinity, zoom: 5 }
   ];
 

@@ -9,7 +9,6 @@ import { Input } from "@/shared/ui/Input";
 import { Placemark, YMap } from "@/shared/ui/YandexMap";
 import { InputRange } from "@/shared/ui/InputRange";
 import { useCallback, useMemo, useState } from "react";
-import { radiusToZoom } from "@/shared/lib/radiusToZoom";
 import { Button } from "@/shared/ui/Button";
 import { formatDistance, formatTime } from "@/shared/lib/convert";
 import Marker from "./Marker.png";
@@ -108,7 +107,7 @@ const POINTS: Place[] = [
 ];
 
 export default function Home() {
-  const [range, setRange] = useState([10]);
+  const [range, setRange] = useState([0]);
   const [choosenPoints, setChoosenPoints] = useState<Place[]>([]);
   const [distanceAndDuration, setDistanceAndDuration] = useState<
     {
@@ -151,9 +150,10 @@ export default function Home() {
               value={range}
               onChange={setRange}
               title="Радиус поиска"
-              unitOfMeasurement="км"
-              min={1}
-              max={50}
+              unitOfMeasurement="м"
+              min={0}
+              max={15000}
+              step={500}
             />
           </div>
           <h2 className="text-sm text-gray-500 mb-lg font-semibold uppercase tracking-wide">
@@ -219,7 +219,7 @@ export default function Home() {
           </div>
         )}
         <YMap
-          zoom={radiusToZoom(range[0])}
+          searchRadius={range[0]}
           choosenPoints={choosenPoints.map(({ coords }) => coords)}
           handleSetDistanceAndDuration={setDistanceAndDuration}
         >
