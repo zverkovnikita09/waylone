@@ -14,7 +14,7 @@ export default function Profile() {
           <div className="p-lg">
             <p className="font-semibold">Красная площадь</p>
             <div className="flex justify-between mt-xs">
-              <p className="text-secondary-texttext-xs">Москва • 3 дня назад</p>
+              <p className="text-secondary-text text-xs">Москва • 3 дня назад</p>
               <div className="flex gap-xs items-center text-warning text-xs">
                 <FaStar />
                 5.0

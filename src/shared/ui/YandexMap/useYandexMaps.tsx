@@ -17,8 +17,7 @@ export const useYandexMaps = () => {
 
         await new Promise((resolve, reject) => {
           const script = document.createElement("script");
-          script.src =
-            "https://api-maps.yandex.ru/2.1/?apikey=bb22d247-5f51-46ab-a029-ccc1e0e3323c&lang=ru_RU";
+          script.src = `https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_YANDEX_MAP_API_KEY}&lang=ru_RU`;
           script.async = true;
 
           script.onload = () => resolve(undefined);

@@ -1,19 +1,25 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  RefObject,
+  useContext,
+  useState,
+} from "react";
+import { Ymaps } from "./types";
 
 interface MapContextType {
-  placemark: any[];
-  setPlacemarks: (objects: []) => void;
+  ymaps: Ymaps;
+  geoObjects: RefObject<null | Record<string, any>>;
+  mapInstance: RefObject<null | Record<string, any>>;
 }
 
 const MapContext = createContext<MapContextType | null>(null);
 
-export const MapContextProvider = ({ children }: PropsWithChildren) => {
-  const [placemark, setPlacemarks] = useState([]);
-  return (
-    <MapContext.Provider value={{ placemark, setPlacemarks }}>
-      {children}
-    </MapContext.Provider>
-  );
+export const MapContextProvider = ({
+  children,
+  ...props
+}: PropsWithChildren<MapContextType>) => {
+  return <MapContext.Provider value={props}>{children}</MapContext.Provider>;
 };
 
 export const useMapContext = () => {

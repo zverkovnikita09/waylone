@@ -1,30 +1,46 @@
 "use client";
 
+import { MdOutlineMuseum } from "react-icons/md";
+import { Place } from "./page";
+import { getDistanceInKm, Point } from "@/shared/lib/mapUtils";
+
 interface PopularPlacesProps {
-  places: {
-    title: string;
-    city: string;
-    distance: string;
-    icon: JSX.Element;
-  }[];
+  places: Place[];
+  userPosition: Point | null;
+  setHoveredPoint: (pointId: number | null) => void;
+  setCenterOnPoint: (pointId: number) => void;
 }
 
-export const PopularPlaces = ({ places }: PopularPlacesProps) => {
+export const PopularPlaces = ({
+  places,
+  userPosition,
+  setHoveredPoint,
+  setCenterOnPoint,
+}: PopularPlacesProps) => {
   return (
     <div className="flex flex-col gap-md">
-      {places.map(({ city, distance, title, icon }, i) => (
+      {places.map(({ title, coords, id }) => (
         <div
           className="flex p-lg items-start gap-lg border-1 border-gray-200 rounded-lg cursor-pointer transition-all duration-base hover:border-primary-500 hover:shadow-md hover:translate-x-xs"
-          key={i}
+          key={id}
+          onMouseEnter={() => setHoveredPoint(id)}
+          onMouseLeave={() => setHoveredPoint(null)}
+          onClick={() => setCenterOnPoint(id)}
         >
           <div className="w-[60px] h-[60px] bg-primary-500 rounded-lg grid place-content-center text-white text-3xl">
-            {icon}
+            <MdOutlineMuseum />
           </div>
           <div>
             <p className="mb-xs font-semibold">{title}</p>
-            <p className="text-gray-500 text-xs">
-              {city} • {distance} от вас
-            </p>
+            {userPosition && (
+              <p className="text-gray-500 text-xs">
+                Москва •{" "}
+                <span className="font-bold">
+                  {getDistanceInKm(userPosition, coords).toFixed(2)} км{" "}
+                </span>
+                от вас
+              </p>
+            )}
           </div>
         </div>
       ))}

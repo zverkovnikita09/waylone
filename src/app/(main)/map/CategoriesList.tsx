@@ -42,7 +42,7 @@ export const CategoriesList = ({ categories }: CategoriesListProps) => {
           <div
             key={category.title}
             className={cn(
-              "grid place-content-center cursor-pointer rounded-lg border-2 border-transparent transition-all p-md bg-gray-100 duration-base",
+              "grid place-content-center cursor-pointer rounded-lg border-2 border-transparent transition-all p-md bg-gray-100 duration-base select-none",
               {
                 "bg-primary-500 text-white hover:bg-primary-500": isActive,
                 "hover:bg-white hover:shadow-md hover:border-primary-500 hover:-translate-y-0.5":

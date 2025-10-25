@@ -6,7 +6,7 @@ import { TbBuildingMonument } from "react-icons/tb";
 import { GiGreekTemple } from "react-icons/gi";
 import { PopularPlaces } from "./PopularPlaces";
 import { Input } from "@/shared/ui/Input";
-import { Placemark, YMap } from "@/shared/ui/YandexMap";
+import { Placemark, RouteBuilder, YMap } from "@/shared/ui/YandexMap";
 import { InputRange } from "@/shared/ui/InputRange";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "@/shared/ui/Button";
@@ -14,6 +14,7 @@ import { formatDistance, formatTime } from "@/shared/lib/convert";
 import Marker from "./Marker.png";
 import MarkerSelected from "./MarkerSelected.png";
 import { useSearchParams } from "next/navigation";
+import { useGeolocation } from "@/shared/lib/useGeolocation";
 
 type Categories =
   | "theatre"
@@ -32,46 +33,46 @@ const categories = [
   { title: "Кремли", category: "cremlin", icon: <GiGreekTemple /> },
 ];
 
-const popular = [
-  {
-    title: "Красная площадь",
-    city: "Москва",
-    distance: "2.3км",
-    icon: <TbBuildingMonument />,
-  },
-  {
-    title: "Эрмитаж",
-    city: "Санкт-Петербург",
-    distance: "634м",
-    icon: <MdOutlineMuseum />,
-  },
-  {
-    title: "Красная площадь",
-    city: "Москва",
-    distance: "2.3км",
-    icon: <TbBuildingMonument />,
-  },
-  {
-    title: "Эрмитаж",
-    city: "Санкт-Петербург",
-    distance: "634м",
-    icon: <MdOutlineMuseum />,
-  },
-  {
-    title: "Красная площадь",
-    city: "Москва",
-    distance: "2.3км",
-    icon: <TbBuildingMonument />,
-  },
-  {
-    title: "Эрмитаж",
-    city: "Санкт-Петербург",
-    distance: "634м",
-    icon: <MdOutlineMuseum />,
-  },
-];
+// const popular = [
+//   {
+//     title: "Красная площадь",
+//     city: "Москва",
+//     distance: "2.3км",
+//     icon: <TbBuildingMonument />,
+//   },
+//   {
+//     title: "Эрмитаж",
+//     city: "Санкт-Петербург",
+//     distance: "634м",
+//     icon: <MdOutlineMuseum />,
+//   },
+//   {
+//     title: "Красная площадь",
+//     city: "Москва",
+//     distance: "2.3км",
+//     icon: <TbBuildingMonument />,
+//   },
+//   {
+//     title: "Эрмитаж",
+//     city: "Санкт-Петербург",
+//     distance: "634м",
+//     icon: <MdOutlineMuseum />,
+//   },
+//   {
+//     title: "Красная площадь",
+//     city: "Москва",
+//     distance: "2.3км",
+//     icon: <TbBuildingMonument />,
+//   },
+//   {
+//     title: "Эрмитаж",
+//     city: "Санкт-Петербург",
+//     distance: "634м",
+//     icon: <MdOutlineMuseum />,
+//   },
+// ];
 
-interface Place {
+export interface Place {
   coords: [number, number];
   title: string;
   id: number;
@@ -109,6 +110,9 @@ const POINTS: Place[] = [
 export default function Home() {
   const [range, setRange] = useState([0]);
   const [choosenPoints, setChoosenPoints] = useState<Place[]>([]);
+  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
+  const [centerOnPoint, setCenterOnPoint] = useState<number | null>(null);
+
   const [distanceAndDuration, setDistanceAndDuration] = useState<
     {
       distance: number;
@@ -136,6 +140,8 @@ export default function Home() {
     return POINTS;
   }, [searchParams]);
 
+  const { coords } = useGeolocation();
+
   return (
     <div className="flex h-full overflow-auto">
       <div className="w-[380px] border-r-gray-200 border-r-1 flex flex-col overflow-auto pt-2xl">
@@ -161,7 +167,12 @@ export default function Home() {
           </h2>
         </div>
         <div className="flex-1 overflow-auto px-2xl pb-2xl">
-          <PopularPlaces places={popular} />
+          <PopularPlaces
+            places={POINTS}
+            userPosition={coords ? [coords.latitude, coords.longitude] : null}
+            setHoveredPoint={setHoveredPoint}
+            setCenterOnPoint={setCenterOnPoint}
+          />
         </div>
       </div>
       <div className="flex-1 bg-gray-200 relative flex">
@@ -169,13 +180,13 @@ export default function Home() {
           <div className="w-[270px] absolute bg-main-bg p-lg left-xs top-xs z-1 shadow-md rounded-xl">
             <p className="text-2xl">Маршрут</p>
             <div className="mt-lg">
-              {/* <div
+              <div
                 className="relative pl-md pb-lg leading-none border-primary border-dashed"
                 style={{ borderLeftWidth: 2 }}
               >
                 <div className="w-md h-md rounded-full bg-primary absolute top-0 left-0 -translate-x-[7px]" />
                 <p className="-translate-y-0.5">Мое местоположение</p>
-              </div> */}
+              </div>
               {choosenPoints.map(({ title, id }, index, arr) => {
                 const routeData = distanceAndDuration[index];
                 const needShowSkeleton = !routeData && index !== arr.length - 1;
@@ -219,9 +230,7 @@ export default function Home() {
           </div>
         )}
         <YMap
-          searchRadius={range[0]}
-          choosenPoints={choosenPoints.map(({ coords }) => coords)}
-          handleSetDistanceAndDuration={setDistanceAndDuration}
+          userPosition={coords ? [coords.latitude, coords.longitude] : null}
         >
           {sortedPoints.map((item) => (
             <Placemark
@@ -231,13 +240,21 @@ export default function Home() {
               options={{
                 iconLayout: "default#image",
                 iconImageSize: [30, 37],
-                iconImageHref: choosenPoints.find(({ id }) => item.id === id)
-                  ? MarkerSelected.src
-                  : Marker.src,
+                iconImageHref:
+                  choosenPoints.find(({ id }) => item.id === id) ||
+                  hoveredPoint === item.id
+                    ? MarkerSelected.src
+                    : Marker.src,
                 iconImageOffset: [-15, -35],
               }}
+              panToPoint={centerOnPoint === item.id}
             />
           ))}
+          <RouteBuilder
+            searchRadius={range[0]}
+            coords={choosenPoints.map(({ coords }) => coords)}
+            onRouteBuilded={setDistanceAndDuration}
+          />
         </YMap>
       </div>
     </div>

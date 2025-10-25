@@ -1,4 +1,6 @@
-import { isValidElement } from "react";
+"use client";
+import { useEffect, useRef } from "react";
+import { useMapContext } from "./MapContext";
 
 type Coord = [number, number];
 interface PlacemarkProps {
@@ -14,24 +16,61 @@ interface PlacemarkProps {
     iconImageOffset?: Coord;
   };
   onClick?: () => void;
-  isChoosen?: boolean;
+  panToPoint?: boolean;
 }
 
-export type PlacemarkElement = React.ReactElement<PlacemarkProps>;
+export const Placemark = ({
+  coords,
+  balloonContent,
+  hintContent,
+  onClick,
+  options = {},
+  panToPoint,
+}: PlacemarkProps) => {
+  const { geoObjects, ymaps, mapInstance } = useMapContext();
+  const placemarkRef = useRef<any>(null);
 
-export function isPlacemarkElement(element: any): element is PlacemarkElement {
-  return (
-    isValidElement(element) &&
-    typeof element.type !== "string" &&
-    typeof element.type === "function" &&
-    "displayName" in element.type &&
-    element.type.displayName === "Placemark"
-  );
-}
+  useEffect(() => {
+    if (!geoObjects.current) return;
 
-export const Placemark = ({}: PlacemarkProps) => {
+    // Добавляем новые метки
+    const yPlacemark = new ymaps.Placemark(
+      coords,
+      {
+        balloonContent,
+        hintContent,
+      },
+      options
+    );
+
+    if (onClick) {
+      yPlacemark.events.add("click", onClick);
+    }
+
+    placemarkRef.current = yPlacemark;
+
+    geoObjects.current.add(yPlacemark);
+
+    return () => {
+      geoObjects.current?.remove(placemarkRef.current);
+    };
+  }, [geoObjects]);
+
+  useEffect(() => {
+    if (!placemarkRef.current) return;
+    placemarkRef.current.options.set("iconImageHref", options.iconImageHref);
+  }, [options.iconImageHref, placemarkRef]);
+
+  useEffect(() => {
+    if (!panToPoint || !mapInstance.current) return;
+
+    mapInstance.current.setZoom(15);
+    mapInstance.current.panTo(coords, {
+      flying: true,
+      duration: 1000,
+    });
+  }, [panToPoint]);
+
   return null;
 };
-
-Placemark.displayName = "Placemark";
 

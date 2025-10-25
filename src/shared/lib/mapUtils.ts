@@ -1,16 +1,16 @@
-import { PlacemarkElement } from "../ui/YandexMap";
-
 export type Point = [number, number]
 
 const LATITUDE = 0;
 const LONGITUDE = 1;
 
+const EARTH_RADIUS_IN_KM = 6371;
+
 /**
  * Функция для вычисления расстояния между двумя координатами в км
  * (формула Хаверсинуса)
  */
-function getDistanceInKm(p1: Point, p2: Point): number {
-  const R = 6371; // Радиус Земли в км
+export function getDistanceInKm(p1: Point, p2: Point): number {
+  const R = EARTH_RADIUS_IN_KM;
   const dLat = degToRad(p2[LATITUDE] - p1[LATITUDE]);
   const dLng = degToRad(p2[LONGITUDE] - p1[LONGITUDE]);
   const a =
@@ -36,10 +36,10 @@ function radTodeg(rad: number): number {
  */
 export function filterPointsWithinRadius(
   current: Point,
-  points: PlacemarkElement[],
+  points: Point[],
   radiusKm: number
-): PlacemarkElement[] {
-  return points.filter(point => getDistanceInKm(current, point.props.coords) <= radiusKm);
+): Point[] {
+  return points.filter(point => getDistanceInKm(current, point) <= radiusKm);
 }
 
 /**
@@ -49,7 +49,7 @@ export function filterPointsWithinRadius(
  * @param bearingDeg угол (азимут) в градусах (0° — север, 90° — восток и т.д.)
  */
 export function getPointOnCircle(center: Point, radiusKm: number, bearingDeg: number): Point {
-  const R = 6371; // радиус Земли в км
+  const R = EARTH_RADIUS_IN_KM;
   const bearing = degToRad(bearingDeg);
   const lat1 = degToRad(center[LATITUDE]);
   const lng1 = degToRad(center[LONGITUDE]);
