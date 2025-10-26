@@ -6,13 +6,16 @@ import { FaRegMap } from "react-icons/fa";
 import { FaRoute } from "react-icons/fa";
 import { GoTrophy } from "react-icons/go";
 import { SocialMediaTab } from "./SocialMediaTab";
+import {PhoneTab} from "@/features/Login/ui/PhoneTab";
+import {EmailTab} from "@/features/Login/ui/EmailTab";
 
 export const LoginButton = () => {
+
   return (
     <Popup TriggerButton={<Button>Войти</Button>}>
       {({ Title }) => (
-        <div className="w-[480px] rounded-2xl bg-primary overflow-hidden">
-          <div className="bg-gradient-to-br from-primary-500 to-accent-500 w-full text-primary p-2xl text-center">
+        <div className="w-[480px] rounded-2xl bg-main-bg overflow-hidden">
+          <div className="bg-gradient-to-br from-primary-500 to-accent-500 w-full text-white p-2xl text-center">
             <Title>
               <span className="text-2xl mb-sm font-bold">
                 Добро пожаловать!
@@ -23,7 +26,9 @@ export const LoginButton = () => {
             </p>
           </div>
           <div className="p-2xl">
-            <SocialMediaTab />
+            {/*<EmailTab/>*/}
+            <PhoneTab isCodeSent={true}/>
+            {/*<SocialMediaTab />*/}
             <div className="border-t-1 border-gray-100 pt-xl mt-xl grid grid-cols-3">
               <div className="flex flex-col items-center text-center gap-sm text-2xl">
                 <FaRegMap />

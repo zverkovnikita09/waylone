@@ -6,7 +6,7 @@ import { TbBuildingMonument } from "react-icons/tb";
 import { GiGreekTemple } from "react-icons/gi";
 import { PopularPlaces } from "./PopularPlaces";
 import { Input } from "@/shared/ui/Input";
-import { Placemark, RouteBuilder, YMap } from "@/shared/ui/YandexMap";
+import {Placemark, RouteBuilder, SearchRadius, YMap} from "@/shared/ui/YandexMap";
 import { InputRange } from "@/shared/ui/InputRange";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "@/shared/ui/Button";
@@ -252,12 +252,17 @@ export default function Home() {
           ))}
           <RouteBuilder
             searchRadius={range[0]}
-            coords={choosenPoints.map(({ coords }) => coords)}
+            coords={[[55.76, 37.64], ...choosenPoints.map(({ coords }) => coords)]}
             onRouteBuilded={setDistanceAndDuration}
           />
+          <SearchRadius searchRadius={range[0]} userPosition={[55.76, 37.64]}/>
         </YMap>
       </div>
     </div>
   );
 }
 
+const coords = {
+  latitude: 55.76,
+  longitude: 37.64,
+}

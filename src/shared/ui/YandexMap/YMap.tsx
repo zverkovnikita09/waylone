@@ -30,14 +30,6 @@ export const YMap = memo(
 
     const { ymaps, loading, error } = useYandexMaps();
 
-    // const placemarks = useMemo(
-    //   () =>
-    //     Children.toArray(children).filter((child): child is PlacemarkElement =>
-    //       isPlacemarkElement(child)
-    //     ),
-    //   [children]
-    // );
-
     useEffect(() => {
       if (ymaps && mapRef.current) {
         const map = new ymaps.Map(mapRef.current, {
@@ -62,37 +54,6 @@ export const YMap = memo(
         mapInstance.current = map;
       }
     }, [ymaps, mapRef]);
-
-    // useEffect(() => {
-    //   if (
-    //     mapInstance.current &&
-    //     geoObjects.current &&
-    //     ymaps &&
-    //     typeof searchRadius === "number"
-    //   ) {
-    //     mapInstance.current.setZoom(radiusToZoom(searchRadius));
-
-    //     if (circleRef.current) {
-    //       geoObjects.current.remove(circleRef.current);
-    //     }
-
-    //     const circle = new ymaps.Circle(
-    //       [[55.76, 37.64], searchRadius],
-    //       {},
-    //       {
-    //         fillColor: "rgba(0, 0, 255, 0.1)",
-    //         strokeColor: "#0000FF",
-    //         strokeWidth: 2,
-    //         interactive: false,
-    //         cursor: "default",
-    //         draggable: false,
-    //       }
-    //     );
-
-    //     geoObjects.current.add(circle);
-    //     circleRef.current = circle;
-    //   }
-    // }, [searchRadius]);
 
     if (loading) return <div className="h-full w-full">Загрузка карты...</div>;
     if (error || !ymaps)

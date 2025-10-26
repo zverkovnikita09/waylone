@@ -51,7 +51,8 @@ export const RouteBuilder = ({
     );
 
     multiRoute.model.events.add("requestsuccess", () => {
-      var activeRoute = multiRoute.getActiveRoute();
+      const activeRoute = multiRoute.getActiveRoute();
+      if(!activeRoute) return;
       activeRoute.options.set("interactive", false);
       activeRoute.options.set("cursor", "default");
 
@@ -78,7 +79,7 @@ export const RouteBuilder = ({
 
   useEffect(() => {
     if (!multiRouteRef.current) return;
-    if (!coords?.length) {
+    if (!coords?.length || coords.length === 1) {
       multiRouteRef.current.model.setReferencePoints([]);
       onRouteBuilded?.([]);
       return;
