@@ -19,8 +19,8 @@ interface YMapProps {
 export const YMap = memo(
   ({ children, userPosition = null }: PropsWithChildren<YMapProps>) => {
     const mapRef = useRef(null);
-    const mapInstance = useRef(null);
-    const geoObjects = useRef(null);
+    const mapInstance = useRef<any>(null);
+    const geoObjects = useRef<any>(null);
 
     const { ymaps, loading, error } = useYandexMaps();
 
@@ -34,14 +34,11 @@ export const YMap = memo(
         });
 
         map.options.set({
-          copyrightLogoVisible: false,
-          copyrightProvidersVisible: false,
-          copyrightUaVisible: false,
           suppressMapOpenBlock: true,
           yandexMapDisablePoiInteractivity: true,
         });
 
-        map.behaviors.disable("dblClickZoom");
+        map.behaviors.disable(["dblClickZoom", 'rightMouseButtonMagnifier',]);
         geoObjects.current = new ymaps.GeoObjectCollection();
         map.geoObjects.add(geoObjects.current);
 
@@ -51,7 +48,7 @@ export const YMap = memo(
 
     if (loading) return <div className="h-full w-full">Загрузка карты...</div>;
     if (error || !ymaps)
-      return <div className="h-full w-full">Ошибка: {error.message}</div>;
+      return <div className="h-full w-full">Ошибка: {error instanceof Error ? error.message : 'Неизвестная ошибка'}</div>;
 
     return (
       <MapContextProvider

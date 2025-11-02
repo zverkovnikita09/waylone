@@ -1,4 +1,4 @@
-import { PropsWithChildren, ComponentPropsWithoutRef } from "react";
+import { PropsWithChildren, ComponentPropsWithoutRef, ReactNode } from "react";
 import cn from "classnames";
 
 type AllowedButtonElementTypes = "button" | "a" | "label";
@@ -22,8 +22,8 @@ export type ButtonProps<T extends AllowedButtonElementTypes> = {
   as?: T;
   className?: string;
   fullWidth?: boolean;
-  IconLeft?: JSX.Element;
-  IconRight?: JSX.Element;
+  IconLeft?: ReactNode;
+  IconRight?: ReactNode;
   variant?: keyof typeof STYLE_VARIANTS;
   size?: keyof typeof SIZE_VARIANTS;
   isLoading?: boolean;
@@ -45,7 +45,7 @@ export const Button = <T extends AllowedButtonElementTypes = "button">(
     ...otherProps
   } = props;
 
-  const Component = as;
+  const Component = as as any;
 
   return (
     <Component
@@ -55,7 +55,7 @@ export const Button = <T extends AllowedButtonElementTypes = "button">(
         STYLE_VARIANTS[variant],
         SIZE_VARIANTS[size]
       )}
-      {...otherProps}
+      {...(otherProps as any)}
     >
       {/* {isLoading && (
         <div className={styles.Loader}>

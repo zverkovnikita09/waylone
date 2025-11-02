@@ -38,7 +38,7 @@ export const EmailTab = ({ isCodeSent, state }: EmailTabProps) => {
 
   if (isCodeSent) {
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} key={"code-form"}>
         <Controller
           control={control}
           name="code"
@@ -66,7 +66,7 @@ export const EmailTab = ({ isCodeSent, state }: EmailTabProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} key={"email-form"}>
       <Controller
         control={control}
         name="email"

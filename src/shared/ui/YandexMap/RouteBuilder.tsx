@@ -19,20 +19,22 @@ export const RouteBuilder = ({
   searchRadius,
 }: RouteBuilderProps) => {
   const { ymaps, geoObjects } = useMapContext();
-  const multiRouteRef = useRef(null);
+  const multiRouteRef = useRef<any>(null);
 
   useEffect(() => {
     if (!ymaps || !geoObjects.current) return;
 
     const objectsToRemove: any[] = [];
-    geoObjects.current.each((obj) => {
+    geoObjects.current.each((obj: any) => {
+      //@ts-ignore
       if (obj instanceof ymaps.multiRouter.MultiRoute) {
         objectsToRemove.push(obj);
       }
     });
 
-    objectsToRemove.forEach((obj) => geoObjects.current.remove(obj));
+    objectsToRemove.forEach((obj) => geoObjects.current?.remove(obj));
 
+    //@ts-ignore
     const multiRoute = new ymaps.multiRouter.MultiRoute(
       {
         referencePoints: [],

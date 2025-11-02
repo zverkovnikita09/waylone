@@ -12,7 +12,7 @@ import {
 import { PropsWithChildren, ReactNode } from "react";
 
 interface PopupProps {
-  TriggerButton: JSX.Element;
+  TriggerButton: ReactNode;
   children?: (props: { Title: typeof Title; Close: typeof Close }) => ReactNode;
 }
 

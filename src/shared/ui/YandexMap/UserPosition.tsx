@@ -16,6 +16,7 @@ export const UserPosition = ({ userPosition }: UserPositionProps) => {
   const userPointRef = useRef<any>(null);
 
   const getAddress = async () => {
+    if (!userPosition) return;
     setIsLoading(true);
     const res = await ymaps.geocode(userPosition);
     const firstGeoObject = res.geoObjects.get(0);
@@ -62,7 +63,7 @@ export const UserPosition = ({ userPosition }: UserPositionProps) => {
 
   return (
     <div
-      className="absolute bottom-[20px] text-sm right-[20px] bg-white shadow-md flex gap-sm items-center px-lg py-md rounded-lg cursor-pointer"
+      className="absolute bottom-[30px] text-sm right-[20px] bg-white shadow-md flex gap-sm items-center px-lg py-md rounded-lg cursor-pointer"
       onClick={goToUserPosition}
     >
       <div className="rounded-full bg-success w-md h-md" />

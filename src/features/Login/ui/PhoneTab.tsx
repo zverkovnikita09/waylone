@@ -41,7 +41,7 @@ export const PhoneTab = ({ isCodeSent, state }: PhoneTabProps) => {
 
   if (isCodeSent) {
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} key={"code-form"}>
         <Controller
           control={control}
           name="code"
@@ -69,7 +69,7 @@ export const PhoneTab = ({ isCodeSent, state }: PhoneTabProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} key={"phone-form"}>
       <Controller
         control={control}
         name="phone"

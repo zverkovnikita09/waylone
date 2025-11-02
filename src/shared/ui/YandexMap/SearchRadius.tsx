@@ -26,6 +26,7 @@ export const SearchRadius = ({searchRadius,userPosition}: SearchRadiusProps) => 
         geoObjects.current.remove(circleRef.current);
       }
 
+      //@ts-ignore
       const circle = new ymaps.Circle(
         [[55.76, 37.64], searchRadius],
         {},

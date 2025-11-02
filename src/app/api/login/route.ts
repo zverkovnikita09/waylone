@@ -40,6 +40,18 @@ export async function POST(request: Request) {
         maxAge: 60 * 60 * 24 * 7, // 7 дней
       });
     }
+    if (data.token) {
+      response.cookies.delete("autorization");
+      response.cookies.set({
+        name: "auth-token",
+        value: data.token,
+        httpOnly: true, // защищаем от JS-доступа
+        secure: true, // только по HTTPS
+        sameSite: "lax", // или 'strict', если нужно
+        path: "/", // доступно во всём приложении
+        maxAge: 60 * 60 * 24 * 7, // 7 дней
+      });
+    }
     return response;
   } catch (error: any) {
     console.error("Proxy error:", error);

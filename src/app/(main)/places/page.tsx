@@ -1,4 +1,4 @@
-import { Place } from "@/app/api/places/route";
+import { Place } from "@/app/api/places/types";
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
 import { PlaceCard } from "@/widgets/PlaceCard";

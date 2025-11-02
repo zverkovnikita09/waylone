@@ -1,4 +1,4 @@
-import { Place } from "@/app/api/places/route";
+import { Place } from "@/app/api/places/types";
 import { Card } from "@/shared/ui/Card";
 import { Button } from "@/shared/ui/Button";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { PiMoneyWavy } from "react-icons/pi";
 import { LiaSubwaySolid } from "react-icons/lia";
 
 type PlaceProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 const DATA: Place = {

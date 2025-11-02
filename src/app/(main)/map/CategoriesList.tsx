@@ -2,9 +2,10 @@
 
 import cn from "classnames";
 import { useSearchParams, useRouter } from "next/navigation";
+import { ReactNode } from "react";
 
 interface CategoriesListProps {
-  categories: { title: string; category: string; icon: JSX.Element }[];
+  categories: { title: string; category: string; icon: ReactNode }[];
 }
 
 export const CategoriesList = ({ categories }: CategoriesListProps) => {

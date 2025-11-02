@@ -21,7 +21,7 @@ import MarkerSelected from "./MarkerSelected.png";
 import { useSearchParams } from "next/navigation";
 import { useGeolocation } from "@/shared/lib/useGeolocation";
 import { Point } from "@/shared/lib/mapUtils";
-import { Place } from "@/app/api/places/route";
+import { Place } from "@/app/api/places/types";
 import { BalloonContent } from "@/shared/ui/YandexMap/BalloonContent";
 import * as ReactDOMServer from "react-dom/server";
 
@@ -82,7 +82,8 @@ export const Page = ({ places }: PageProps) => {
   const { coords } = useGeolocation();
 
   const userPosition = useMemo<Point | null>(() => {
-    return coords ? [coords.latitude, coords.longitude] : null;
+    return [51.661328,39.207114]
+    // return coords ? [coords.latitude, coords.longitude] : null;
   }, [coords]);
 
   return (
@@ -112,7 +113,7 @@ export const Page = ({ places }: PageProps) => {
         <div className="flex-1 overflow-auto px-2xl pb-2xl">
           <PopularPlaces
             places={places}
-            userPosition={coords ? [coords.latitude, coords.longitude] : null}
+            userPosition={userPosition}
             setHoveredPoint={setHoveredPoint}
             setCenterOnPoint={setCenterOnPoint}
           />

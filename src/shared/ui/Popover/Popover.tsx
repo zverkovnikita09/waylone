@@ -4,10 +4,10 @@ import {
   Portal,
   Content as RadixContent,
 } from "@radix-ui/react-popover";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState, ReactNode } from "react";
 
 interface PopoverProps {
-  Content: JSX.Element;
+  Content: ReactNode;
   side?: "bottom" | "left" | "right" | "top";
   align?: "end" | "start" | "center";
   avoidCollisions?: boolean;

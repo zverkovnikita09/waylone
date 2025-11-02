@@ -1,5 +1,5 @@
 "use client";
-import { CATEGORIES, Place } from "@/app/api/places/route";
+import { CATEGORIES, Place } from "@/app/api/places/types";
 import { Button } from "@/shared/ui/Button";
 import { FavoriteButton } from "@/shared/ui/FavoriteButton";
 import Image from "next/image";

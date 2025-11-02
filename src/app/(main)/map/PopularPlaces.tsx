@@ -1,7 +1,7 @@
 "use client";
 
 import { MdOutlineMuseum } from "react-icons/md";
-import { Place } from "./page";
+import { Place } from "@/app/api/places/types";
 import { getDistanceInKm, Point } from "@/shared/lib/mapUtils";
 
 interface PopularPlacesProps {

@@ -1,4 +1,4 @@
-import { Place } from "@/app/api/places/route";
+import { Place } from "@/app/api/places/types";
 import { Button } from "../Button";
 import Link from "next/link";
 import { FaStar } from "react-icons/fa";

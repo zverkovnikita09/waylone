@@ -1,8 +1,8 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 interface InfoBlockProps {
   title: string;
-  Icon?: JSX.Element;
+  Icon?: ReactNode;
 }
 
 export const InfoBlock = ({

@@ -1,5 +1,5 @@
 import { Page } from "./pageContent";
-import { Place } from "@/app/api/places/route";
+import { Place } from "@/app/api/places/types";
 
 export default async function Map() {
   const data: Place[] = await fetch("http://localhost:3000/api/places", {
