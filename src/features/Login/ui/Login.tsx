@@ -6,11 +6,15 @@ import { FaRegMap } from "react-icons/fa";
 import { FaRoute } from "react-icons/fa";
 import { GoTrophy } from "react-icons/go";
 import { SocialMediaTab } from "./SocialMediaTab";
-import {PhoneTab} from "@/features/Login/ui/PhoneTab";
-import {EmailTab} from "@/features/Login/ui/EmailTab";
+import { PhoneTab } from "@/features/Login/ui/PhoneTab";
+import { EmailTab } from "@/features/Login/ui/EmailTab";
+import { Tab, Tabs } from "@/shared/ui/Tabs";
 
-export const LoginButton = () => {
+interface LoginButtonProps {
+  autorization?: any;
+}
 
+export const LoginButton = ({ autorization }: LoginButtonProps) => {
   return (
     <Popup TriggerButton={<Button>Войти</Button>}>
       {({ Title }) => (
@@ -26,9 +30,27 @@ export const LoginButton = () => {
             </p>
           </div>
           <div className="p-2xl">
-            {/*<EmailTab/>*/}
-            <PhoneTab isCodeSent={true}/>
-            {/*<SocialMediaTab />*/}
+            <Tabs>
+              <Tab title="Соцсети" content={<SocialMediaTab />} />
+              <Tab
+                title="Email"
+                content={
+                  <EmailTab
+                    isCodeSent={autorization?.autorizationType === "email"}
+                    state={autorization?.email}
+                  />
+                }
+              />
+              <Tab
+                title="Телефон"
+                content={
+                  <PhoneTab
+                    isCodeSent={autorization?.autorizationType === "phone"}
+                    state={autorization?.phone}
+                  />
+                }
+              />
+            </Tabs>
             <div className="border-t-1 border-gray-100 pt-xl mt-xl grid grid-cols-3">
               <div className="flex flex-col items-center text-center gap-sm text-2xl">
                 <FaRegMap />

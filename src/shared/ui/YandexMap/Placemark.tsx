@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMapContext } from "./MapContext";
 
 type Coord = [number, number];
@@ -14,9 +14,15 @@ interface PlacemarkProps {
     iconImageHref?: string;
     iconImageSize?: Coord;
     iconImageOffset?: Coord;
+    balloonOffset?: Coord;
+    balloonCloseButton?: boolean;
+    openBalloonOnClick?: boolean;
+    balloonPanelMaxMapArea?: number;
+    balloonLayout?: string;
   };
   onClick?: () => void;
   panToPoint?: boolean;
+  openBaloon?: boolean;
 }
 
 export const Placemark = ({
@@ -26,6 +32,7 @@ export const Placemark = ({
   onClick,
   options = {},
   panToPoint,
+  openBaloon,
 }: PlacemarkProps) => {
   const { geoObjects, ymaps, mapInstance } = useMapContext();
   const placemarkRef = useRef<any>(null);
@@ -40,7 +47,27 @@ export const Placemark = ({
         balloonContent,
         hintContent,
       },
-      options
+      {
+        ...options,
+        hideIconOnBalloonOpen: false,
+        balloonOffset: [
+          options.iconImageSize?.[0] ?? 30,
+          -(options.iconImageSize?.[1] ?? 37) / 2,
+        ],
+        //@ts-ignore
+        balloonLayout: ymaps.templateLayoutFactory.createClass(
+          `<div class="balloon-root bg-main-bg w-[300px] block relative p-lg rounded-lg shadow-lg" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%);">
+          <div class="w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[15px] border-r-main-bg absolute -left-[15px] z-0 top-[50%] -translate-y-[50%] shadow-2xl"></div>
+          <div class="balloon-body balloon">$[properties.balloonContent]</div>
+        </div>`,
+          {
+            build: function () {
+              this.constructor.superclass.build.call(this);
+              this._element = document.querySelector(".balloon-root");
+            },
+          }
+        ),
+      }
     );
 
     if (onClick) {
@@ -67,9 +94,17 @@ export const Placemark = ({
     mapInstance.current.setZoom(15);
     mapInstance.current.panTo(coords, {
       flying: true,
-      duration: 1000,
+      duration: 100,
     });
   }, [panToPoint]);
+
+  useEffect(() => {
+    if (openBaloon) {
+      placemarkRef.current?.balloon.open();
+    } else {
+      placemarkRef.current?.balloon.close();
+    }
+  }, [openBaloon]);
 
   return null;
 };

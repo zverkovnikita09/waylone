@@ -1,55 +1,94 @@
-"use client"
+"use client";
 
-import {useState} from "react";
-import {Input} from "@/shared/ui/Input";
-import {Button} from "@/shared/ui/Button";
+import { useState } from "react";
+import { Input } from "@/shared/ui/Input";
+import { Button } from "@/shared/ui/Button";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 interface PhoneTabProps {
-    isCodeSent?: boolean;
+  isCodeSent?: boolean;
+  state?: string;
 }
 
-export const PhoneTab = ({isCodeSent}: PhoneTabProps)=>{
-    const [phone, setPhone] = useState("");
-    const [code, setCode] = useState("");
+interface PhoneForm {
+  code?: string;
+  phone: string;
+}
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        const response = await fetch(`http://localhost:3000/api/login/phone`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            // body: JSON.stringify({ application: formData }),
-        });
-        const data = await response.json();
+export const PhoneTab = ({ isCodeSent, state }: PhoneTabProps) => {
+  const { control, handleSubmit } = useForm<PhoneForm>({
+    defaultValues: {
+      phone: "",
+    },
+  });
 
-        console.log(data)
-    }
+  const router = useRouter();
 
-    const handleSubmitCode = async (e)=>{
-        e.preventDefault();
-        const response = await fetch(`http://localhost:3000/api/login/code`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ code }),
-        });
-        const data = await response.json();
+  const onSubmit = async ({ phone, code }: PhoneForm) => {
+    const response = await fetch(`http://localhost:3000/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ phone, code }),
+    });
+    const data = await response.json();
+    router.refresh();
 
-        console.log(data)
-    }
+    console.log(data);
+  };
 
-    if(isCodeSent){
-        return <form onSubmit={handleSubmitCode}>
-            <p>Код</p>
-            <Input value={code} onChange={(e)=>setCode(e.target.value)}/>
-            <Button type="submit">Отправить</Button>
-        </form>
-    }
+  if (isCodeSent) {
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
+          name="code"
+          render={({ field: { value, onChange } }) => (
+            <Input
+              value={value}
+              onChange={onChange}
+              placeholder=""
+              title="Код подтверждения"
+              inputSize="sm"
+            />
+          )}
+        />
+        <p className="text-sm text-secondary-text mt-sm">
+          Код подтверждения выслан на номер{" "}
+          <span className="font-bold">{state}</span>
+        </p>
+        <div className="mt-xl">
+          <Button type="submit" fullWidth>
+            Подтвердить
+          </Button>
+        </div>
+      </form>
+    );
+  }
 
-    return <form onSubmit={handleSubmit}>
-        <Input value={phone} onChange={(e)=>setPhone(e.target.value)}/>
-        <Button type="submit">Отправить</Button>
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            value={value}
+            onChange={onChange}
+            placeholder="+7 (000)-000-00-00"
+            title="Номер телефона"
+            inputSize="sm"
+          />
+        )}
+      />
+      <div className="mt-xl">
+        <Button type="submit" fullWidth>
+          Получить код подтверждения
+        </Button>
+      </div>
     </form>
-}
+  );
+};
+

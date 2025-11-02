@@ -1,19 +1,13 @@
 "use client";
 import {
-  Children,
   memo,
   PropsWithChildren,
-  useCallback,
   useEffect,
-  useMemo,
   useRef,
-  useState,
 } from "react";
 import { useYandexMaps } from "./useYandexMaps";
 import { MapContextProvider } from "./MapContext";
 import { Point } from "@/shared/lib/mapUtils";
-import { radiusToZoom } from "@/shared/lib/radiusToZoom";
-import { Button } from "../Button";
 import { UserPosition } from "./UserPosition";
 
 interface YMapProps {
@@ -33,7 +27,7 @@ export const YMap = memo(
     useEffect(() => {
       if (ymaps && mapRef.current) {
         const map = new ymaps.Map(mapRef.current, {
-          center: [55.76, 37.64],
+          center: userPosition ?? [55.76, 37.64],
           // zoom: radiusToZoom(searchRadius || 10),
           zoom: 10,
           controls: [],
@@ -66,7 +60,7 @@ export const YMap = memo(
         mapInstance={mapInstance}
       >
         <div className="flex-1 flex">
-          <div ref={mapRef} className="flex-1" />;
+          <div ref={mapRef} className="flex-1 overflow-hidden" />;
           <UserPosition userPosition={userPosition} />
           {/* <div className="absolute bottom-[20px] text-sm left-[20px] bg-white shadow-md flex gap-sm items-center px-lg py-md rounded-lg">
             <Button onClick={buildRoute}>Построить маршрут</Button>

@@ -36,6 +36,36 @@ html, body, #__next {
   margin: 0;
 }
 
+.custom-skeleton-highlight {
+  position: relative;
+  overflow: hidden;
+  background: #e0e0e0;
+  display: inline-block;
+  flex: none;
+}
+
+.custom-skeleton-highlight::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  height: 100%;
+  width: 150%;
+  background: linear-gradient(
+    90deg,
+    rgba(224, 224, 224, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(224, 224, 224, 0) 100%
+  );
+  animation: shimmer 1.8s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 150%;
+  }
+}
+
 /* *[title="Открыть в Яндекс.Картах"] {
   display: none !important;
 } */

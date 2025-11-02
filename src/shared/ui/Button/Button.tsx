@@ -8,11 +8,14 @@ const STYLE_VARIANTS = {
     "bg-primary-500 text-white hover:bg-primary-600 hover:-translate-y-px",
   secondary:
     "bg-gray-50 border-gray-200 border-1 hover:bg-primary-600 hover:border-primary-600 hover:-translate-y-px",
+  ["outline-primary"]:
+    "bg-white text-primary border-primary border-2 hover:bg-primary hover:text-white",
 } as const;
 
 const SIZE_VARIANTS = {
   xs: "py-[5px] px-[5px]",
   md: "py-sm px-xl",
+  lg: "px-xl py-lg",
 } as const;
 
 export type ButtonProps<T extends AllowedButtonElementTypes> = {
@@ -47,7 +50,7 @@ export const Button = <T extends AllowedButtonElementTypes = "button">(
   return (
     <Component
       className={cn(
-        "cursor-pointer rounded-lg font-medium transition-all duration-base",
+        "cursor-pointer rounded-lg font-medium transition-all duration-base flex justify-center items-center",
         { "w-full": fullWidth },
         STYLE_VARIANTS[variant],
         SIZE_VARIANTS[size]

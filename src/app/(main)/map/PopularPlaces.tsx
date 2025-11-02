@@ -27,7 +27,7 @@ export const PopularPlaces = ({
           onMouseLeave={() => setHoveredPoint(null)}
           onClick={() => setCenterOnPoint(id)}
         >
-          <div className="w-[60px] h-[60px] bg-primary-500 rounded-lg grid place-content-center text-white text-3xl">
+          <div className="w-[60px] h-[60px] bg-primary-500 rounded-lg grid place-content-center text-white text-3xl shrink-0">
             <MdOutlineMuseum />
           </div>
           <div>

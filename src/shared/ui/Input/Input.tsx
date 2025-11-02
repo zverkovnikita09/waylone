@@ -1,13 +1,44 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, useId } from "react";
 import { CiSearch } from "react-icons/ci";
+import cn from "classnames";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+type InputSize = "sm" | "md" | "lg";
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  isSearch?: boolean;
+  title?: string;
+  inputSize?: InputSize;
+}
 
-export const Input = ({ ...props }: InputProps) => {
+export const Input = ({
+  isSearch,
+  id,
+  title,
+  inputSize = "lg",
+  ...props
+}: InputProps) => {
+  const uniqueId = useId();
   return (
-    <div className="relative w-full">
-      <CiSearch className="absolute text-2xl top-1/2 left-lg -translate-y-1/2" />
-      <input className="border-2 border-gray-200 pl-3xl py-md pr-xl w-full rounded-xl bg-gray text-gray-900" {...props} />
+    <div className="w-full flex flex-col gap-sm">
+      {title && (
+        <label htmlFor={id ?? uniqueId} className="text-sm cursor-pointer">
+          {title}
+        </label>
+      )}
+      <div className="relative w-full">
+        {isSearch && (
+          <CiSearch className="absolute text-2xl top-1/2 left-lg -translate-y-1/2" />
+        )}
+        <input
+          className={cn(
+            "border-2 border-gray-200 w-full transition-all duration-fast bg-gray text-gray-900 outline-none focus:border-primary",
+            { "py-md px-xl rounded-xl": inputSize === "lg" },
+            { "p-md rounded-lg text-sm": inputSize === "sm" },
+            { "pl-3xl": isSearch }
+          )}
+          id={id ?? uniqueId}
+          {...props}
+        />
+      </div>
     </div>
   );
 };

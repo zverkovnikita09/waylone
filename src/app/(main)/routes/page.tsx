@@ -1,6 +1,9 @@
+"use client";
 import { Button } from "@/shared/ui/Button";
 import { RouteCategories } from "./RouteCategories";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { SkeletonProvider, SkeletonWrapper } from "react-skeletonify";
 
 const ROUTE_CATEGORIES = [
   { title: "Популярные", icon: "" },
@@ -13,6 +16,13 @@ const ROUTE_CATEGORIES = [
 ];
 
 export default function Routes() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div>
       <div className="bg-[linear-gradient(135deg,#0ea5e9_0%,#6366f1_100%)] px-3xl py-[60px] text-white text-center">
@@ -74,28 +84,40 @@ export default function Routes() {
               Все маршруты
             </Link>
           </div>
-          <div className="grid grid-cols-4 gap-xl mt-xl">
-            {Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <div
-                  key={index}
-                  className="shadow-md overflow-hidden cursor-pointer rounded-xl"
-                >
-                  <div className="bg-[linear-gradient(135deg,#667eea,#764ba2)] h-[180px] relative ">
-                    <p className="bg-accent-500 rounded-2xl text-xs font-semibold top-md left-md absolute text-white px-md py-sm">
-                      Топ-10
-                    </p>
-                  </div>
-                  <div className="bg-white p-lg">
-                    <p className="text-lg font-semibold">
-                      Выходные в Санкт-Петербурге
-                    </p>
-                    <p className="text-secondary-text mt-sm">Санкт-Петербург</p>
-                  </div>
-                </div>
-              ))}
-          </div>
+          <SkeletonProvider
+            config={{
+              animation: "animation-2",
+              animationSpeed: 3,
+              background: "#f2f2f2",
+              borderRadius: "12px",
+              border: "none",
+              className: "custom-skeleton-highlight",
+            }}
+          >
+            <div className="grid grid-cols-4 gap-xl mt-xl">
+              {Array(8)
+                .fill(0)
+                .map((_, index) => (
+                  <SkeletonWrapper key={index} loading={isLoading}>
+                    <div className="shadow-md overflow-hidden cursor-pointer rounded-xl">
+                      <div className="bg-[linear-gradient(135deg,#667eea,#764ba2)] h-[180px] relative ">
+                        <p className="bg-accent-500 rounded-2xl text-xs font-semibold top-md left-md absolute text-white px-md py-sm">
+                          Топ-10
+                        </p>
+                      </div>
+                      <div className="bg-white p-lg">
+                        <p className="text-lg font-semibold">
+                          Выходные в Санкт-Петербурге
+                        </p>
+                        <p className="text-secondary-text mt-sm">
+                          Санкт-Петербург
+                        </p>
+                      </div>
+                    </div>
+                  </SkeletonWrapper>
+                ))}
+            </div>
+          </SkeletonProvider>
         </div>
       </div>
     </div>
