@@ -22,7 +22,7 @@ export const RouteBuilder = ({
   const multiRouteRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!ymaps || !geoObjects.current) return;
+    if (!ymaps || !geoObjects.current || multiRouteRef.current) return;
 
     const objectsToRemove: any[] = [];
     geoObjects.current.each((obj: any) => {
@@ -54,7 +54,7 @@ export const RouteBuilder = ({
 
     multiRoute.model.events.add("requestsuccess", () => {
       const activeRoute = multiRoute.getActiveRoute();
-      if(!activeRoute) return;
+      if (!activeRoute) return;
       activeRoute.options.set("interactive", false);
       activeRoute.options.set("cursor", "default");
 
@@ -77,7 +77,7 @@ export const RouteBuilder = ({
     });
     multiRouteRef.current = multiRoute;
     geoObjects.current.add(multiRoute);
-  }, [ymaps]);
+  }, [ymaps, geoObjects.current, multiRouteRef.current]);
 
   useEffect(() => {
     if (!multiRouteRef.current) return;
@@ -87,7 +87,7 @@ export const RouteBuilder = ({
       return;
     }
     multiRouteRef.current.model.setReferencePoints(coords);
-  }, [coords?.length]);
+  }, [coords?.length, multiRouteRef.current]);
 
   const buildRoute = () => {
     if (!multiRouteRef.current || !coords || !searchRadius) return;

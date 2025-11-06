@@ -3,10 +3,12 @@ import { CiSearch } from "react-icons/ci";
 import cn from "classnames";
 
 type InputSize = "sm" | "md" | "lg";
+type TitleSize = "sm" | "md" | "lg";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isSearch?: boolean;
   title?: string;
   inputSize?: InputSize;
+  titleSize?: TitleSize;
 }
 
 export const Input = ({
@@ -14,13 +16,21 @@ export const Input = ({
   id,
   title,
   inputSize = "lg",
+  titleSize = "sm",
   ...props
 }: InputProps) => {
   const uniqueId = useId();
   return (
     <div className="w-full flex flex-col gap-sm">
       {title && (
-        <label htmlFor={id ?? uniqueId} className="text-sm cursor-pointer">
+        <label
+          htmlFor={id ?? uniqueId}
+          className={cn("text-sm cursor-pointer", {
+            "text-sm": titleSize === "sm",
+            "text-md": titleSize === "md",
+            "text-lg": titleSize === "lg",
+          })}
+        >
           {title}
         </label>
       )}

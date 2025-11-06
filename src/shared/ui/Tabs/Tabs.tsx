@@ -5,7 +5,9 @@ import { Children, PropsWithChildren, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { isTabElement, TabElement } from "./Tab";
 
-interface TabsProps {}
+interface TabsProps {
+  variant?: "primary" | "secondary";
+}
 
 export const Tabs = ({ children }: PropsWithChildren<TabsProps>) => {
   const tabs = useMemo(
@@ -21,7 +23,6 @@ export const Tabs = ({ children }: PropsWithChildren<TabsProps>) => {
 
   return (
     <Root className="flex w-full flex-col" value={`tab${activeIndex}`}>
-      {/* Заголовки табов */}
       <List className="flex bg-gray-100 p-xs h-max mb-xl rounded-lg">
         {tabs.map(({ props: { title } }, index) => (
           <Trigger

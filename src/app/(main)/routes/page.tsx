@@ -1,19 +1,9 @@
 "use client";
+import { RouteCategories } from "@/enities/Route";
 import { Button } from "@/shared/ui/Button";
-import { RouteCategories } from "./RouteCategories";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SkeletonProvider, SkeletonWrapper } from "react-skeletonify";
-
-const ROUTE_CATEGORIES = [
-  { title: "Популярные", icon: "" },
-  { title: "На выходные", icon: "" },
-  { title: "Для семьи", icon: "" },
-  { title: "Активный отдых", icon: "" },
-  { title: "История и культура", icon: "" },
-  { title: "Гастрономические", icon: "" },
-  { title: "Бюджетные", icon: "" },
-];
 
 export default function Routes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +49,7 @@ export default function Routes() {
           </div>
         </div>
 
-        <RouteCategories categories={ROUTE_CATEGORIES} />
+        <RouteCategories />
 
         <div className="w-full mt-2xl bg-main-bg transition-all duration-base shadow-md rounded-3xl flex overflow-hidden">
           <div className="w-full p-2xl">

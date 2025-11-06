@@ -7,14 +7,12 @@ import { getDistanceInKm, Point } from "@/shared/lib/mapUtils";
 interface PopularPlacesProps {
   places: Place[];
   userPosition: Point | null;
-  setHoveredPoint: (pointId: number | null) => void;
   setCenterOnPoint: (pointId: number) => void;
 }
 
 export const PopularPlaces = ({
   places,
   userPosition,
-  setHoveredPoint,
   setCenterOnPoint,
 }: PopularPlacesProps) => {
   return (
@@ -23,8 +21,6 @@ export const PopularPlaces = ({
         <div
           className="flex p-lg items-start gap-lg border-1 border-gray-200 rounded-lg cursor-pointer transition-all duration-base hover:border-primary-500 hover:shadow-md hover:translate-x-xs"
           key={id}
-          onMouseEnter={() => setHoveredPoint(id)}
-          onMouseLeave={() => setHoveredPoint(null)}
           onClick={() => setCenterOnPoint(id)}
         >
           <div className="w-[60px] h-[60px] bg-primary-500 rounded-lg grid place-content-center text-white text-3xl shrink-0">

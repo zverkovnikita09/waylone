@@ -1,14 +1,10 @@
 "use client";
-import {
-  memo,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-} from "react";
+import { memo, PropsWithChildren, useEffect, useRef } from "react";
 import { useYandexMaps } from "./useYandexMaps";
 import { MapContextProvider } from "./MapContext";
 import { Point } from "@/shared/lib/mapUtils";
 import { UserPosition } from "./UserPosition";
+import { MapLoader } from "./MapLoader";
 
 interface YMapProps {
   userPosition: Point | null;
@@ -38,7 +34,7 @@ export const YMap = memo(
           yandexMapDisablePoiInteractivity: true,
         });
 
-        map.behaviors.disable(["dblClickZoom", 'rightMouseButtonMagnifier',]);
+        map.behaviors.disable(["dblClickZoom", "rightMouseButtonMagnifier"]);
         geoObjects.current = new ymaps.GeoObjectCollection();
         map.geoObjects.add(geoObjects.current);
 
@@ -46,9 +42,19 @@ export const YMap = memo(
       }
     }, [ymaps, mapRef]);
 
-    if (loading) return <div className="h-full w-full">Загрузка карты...</div>;
+    if (loading)
+      return (
+        <div className="h-full w-full">
+          <MapLoader />
+        </div>
+      );
     if (error || !ymaps)
-      return <div className="h-full w-full">Ошибка: {error instanceof Error ? error.message : 'Неизвестная ошибка'}</div>;
+      return (
+        <div className="h-full w-full">
+          Ошибка:{" "}
+          {error instanceof Error ? error.message : "Неизвестная ошибка"}
+        </div>
+      );
 
     return (
       <MapContextProvider

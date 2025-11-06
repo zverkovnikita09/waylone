@@ -1,8 +1,10 @@
 import { Button } from "@/shared/ui/Button";
+import { Card } from "@/shared/ui/Card";
+import Link from "next/link";
 
 export const ProfileHeader = () => {
   return (
-    <div className="bg-main-bg transition-all duration-base shadow-md p-2xl rounded-2xl flex gap-2xl items-center">
+    <Card className="rounded-2xl flex gap-2xl items-center">
       <div className="text-5xl w-[120px] h-[120px] bg-[linear-gradient(135deg,#6366f1_0%,#f59e0b_100%)] text-white rounded-full font-semibold grid place-content-center">
         НЗ
       </div>
@@ -25,10 +27,12 @@ export const ProfileHeader = () => {
         </div>
       </div>
       <div className="flex gap-lg ml-auto">
-        <Button>Редактировать</Button>
+        <Link href="/profile/edit">
+          <Button>Редактировать</Button>
+        </Link>
         <Button variant="secondary">Поделиться</Button>
       </div>
-    </div>
+    </Card>
   );
 };
 

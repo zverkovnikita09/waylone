@@ -81,12 +81,12 @@ export const Placemark = ({
     return () => {
       geoObjects.current?.remove(placemarkRef.current);
     };
-  }, [geoObjects]);
+  }, [geoObjects.current]);
 
   useEffect(() => {
     if (!placemarkRef.current) return;
     placemarkRef.current.options.set("iconImageHref", options.iconImageHref);
-  }, [options.iconImageHref, placemarkRef]);
+  }, [options.iconImageHref, placemarkRef.current]);
 
   useEffect(() => {
     if (!panToPoint || !mapInstance.current) return;

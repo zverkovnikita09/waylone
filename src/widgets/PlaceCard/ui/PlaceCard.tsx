@@ -6,9 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuBadgeRussianRuble } from "react-icons/lu";
 import { MdOutlineTimer } from "react-icons/md";
+import { IoMdDoneAll } from "react-icons/io";
 
 interface PlaceCardProps extends Place {
   short?: boolean;
+  visited_at?: string;
 }
 
 export const PlaceCard = ({
@@ -20,6 +22,7 @@ export const PlaceCard = ({
   address,
   id,
   short,
+  visited_at,
 }: PlaceCardProps) => {
   return (
     <Link
@@ -59,6 +62,15 @@ export const PlaceCard = ({
             {description}
           </p>
         )}
+        {!!visited_at && (
+          <div className="mt-sm flex justify-between items-center">
+            <p className="flex items-center gap-xs text-green-500 font-semibold">
+              <IoMdDoneAll />
+              Посещено
+            </p>
+            <p className="text-secondary-text text-sm">{visited_at}</p>
+          </div>
+        )}
         {!short && (
           <div className="border-t-1 border-gray-200 pt-lg mt-auto flex justify-between items-center text-sm">
             <p className="text-secondary-text flex gap-xs items-center">
@@ -68,9 +80,25 @@ export const PlaceCard = ({
               <LuBadgeRussianRuble size={18} />
               от 1000₽
             </p>
-            <Button>Подробнее</Button>
           </div>
         )}
+        <div
+          className="border-t-1 border-gray-200 pt-lg mt-lg grid grid-cols-3 text-sm gap-sm"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          <Button variant="secondary" size="xs">
+            Отзывы
+          </Button>
+          <Button variant="secondary" size="xs">
+            Фото
+          </Button>
+          <Button variant="secondary" size="xs">
+            На карте
+          </Button>
+        </div>
       </div>
     </Link>
   );

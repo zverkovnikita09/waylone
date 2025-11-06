@@ -49,7 +49,7 @@ interface PageProps {
 export const Page = ({ places }: PageProps) => {
   const [range, setRange] = useState([0]);
   const [choosenPoints, setChoosenPoints] = useState<Place[]>([]);
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
+  // const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
   const [centerOnPoint, setCenterOnPoint] = useState<number | null>(null);
 
   const [distanceAndDuration, setDistanceAndDuration] = useState<
@@ -82,7 +82,7 @@ export const Page = ({ places }: PageProps) => {
   const { coords } = useGeolocation();
 
   const userPosition = useMemo<Point | null>(() => {
-    return [51.661328,39.207114]
+    return [51.661328, 39.207114];
     // return coords ? [coords.latitude, coords.longitude] : null;
   }, [coords]);
 
@@ -114,7 +114,6 @@ export const Page = ({ places }: PageProps) => {
           <PopularPlaces
             places={places}
             userPosition={userPosition}
-            setHoveredPoint={setHoveredPoint}
             setCenterOnPoint={setCenterOnPoint}
           />
         </div>
@@ -201,7 +200,7 @@ export const Page = ({ places }: PageProps) => {
                 iconImageSize: [30, 37],
                 iconImageHref:
                   choosenPoints.find(({ id }) => item.id === id) ||
-                  hoveredPoint === item.id
+                  centerOnPoint === item.id
                     ? MarkerSelected.src
                     : Marker.src,
                 iconImageOffset: [-15, -35],
@@ -210,7 +209,7 @@ export const Page = ({ places }: PageProps) => {
                 balloonPanelMaxMapArea: 0,
               }}
               panToPoint={centerOnPoint === item.id}
-              openBaloon={hoveredPoint === item.id || centerOnPoint === item.id}
+              openBaloon={centerOnPoint === item.id}
             />
           ))}
           <RouteBuilder

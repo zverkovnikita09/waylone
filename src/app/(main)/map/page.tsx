@@ -1,4 +1,4 @@
-import { Page } from "./pageContent";
+import { Page } from "./PageContent";
 import { Place } from "@/app/api/places/types";
 
 export default async function Map() {
